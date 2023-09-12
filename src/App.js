@@ -6,7 +6,7 @@ import MainPage from './Components/MainPage.js';
 function App() {
   return (
     <Routes>
-        <Route path='/*' element={ <MainPage /> }/>
+        <Route path='test_stamp/*' element={ <MainPage /> }/>
         <Route path='*' element={ <div>Упс...страница не найдена</div> } />
     </Routes>
   );
