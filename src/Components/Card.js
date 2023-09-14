@@ -13,7 +13,6 @@ const Card = ({ name, price }) => {
             <span className="name">{ name }</span>
             <span className="price">{ price }</span>
         </div>
-
-}
+};
 
 export default Card;

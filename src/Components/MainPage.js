@@ -14,8 +14,8 @@ const MainPage = () => {
         <DrinksList data={data}/>
         <Routes>
             <Route path='/' element={
-                <div>
-                    Выберите напиток
+                <div className='drink'>
+                    <h2>Выберите напиток</h2>
                 </div>
                 }
             />

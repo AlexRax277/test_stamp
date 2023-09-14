@@ -61,3 +61,16 @@ button {
 button:hover {
   background-color: #0056b3;
 }
+
+.btn-cancel {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+}
+
+.msg {
+  height: 10vh;
+  font-size: 12px;
+  position: relative;
+}

@@ -10,6 +10,6 @@ function App() {
         <Route path='*' element={ <div>Упс...страница не найдена</div> } />
     </Routes>
   );
-}
+};
 
 export default App;

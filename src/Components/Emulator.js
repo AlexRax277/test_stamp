@@ -1,62 +1,47 @@
 class Emulator {
     constructor() {
-        this.cashinActive = false;
-        this.cardTransactionActive = false;
+        this.cancelCardPurchase = false;
     }
 
-    startCashin(drinkPrice, bills, cb) {
-        this.cashinActive = true;
-        let totalAmount = 0;
-
-        const delay = 1000;
-
-        const processBills = async() => {
-            for (const bill of bills) {
-                await new Promise((resolve) => setTimeout(resolve, delay));
-                totalAmount += bill;
-                cb(totalAmount);
-
-                if(!this.cashinActive) {
-                    return;
-                }
-            }
-
-            if (totalAmount >= drinkPrice) {
-                const change = totalAmount - drinkPrice;
-                console.log(`Сдача: ${change} у.е.`);
-            };
-        }
-        processBills();
+    startCashin(cb) {
+        return cb;
     }
 
-    stopCashin() {
-        this.cashinActive = false;
-        console.log('Оплата остановлена');
+    stopCashin(navigate) {
+        navigate('/test_stamp');
     };
 
-    BankCardPurchase(amount, cb, display_cb) {
-        this.cardTransactionActive = true;
-
+    async BankCardPurchase(amount, cb, display_cb) {
+        this.cancelCardPurchase = false;
         display_cb('Приложите карту');
-        setTimeout(() => {
-            display_cb('Обработка карты');
-        }, 1000);
+        await new Promise(resolve => setTimeout(resolve, 2000));
 
-        setTimeout(() => {
-            display_cb('Связь с банком');
-        }, 2000);
+        display_cb('Обработка карты');
 
-        setTimeout(() => {
-            const success = true;
-            cb(success);
-            display_cb('Оплата прошла успешно');
-        }, 3000);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        display_cb('Связь с банком');
+        if (this.cancelCardPurchase) {
+            display_cb('Оплата картой остановлена, для продолжения выберите напиток заново.');
+            return;
+        };
+
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        if(cb()) {
+            display_cb('Банковская транзакция успешно завершена.');
+            return true;
+        } else {
+            display_cb('Банковская транзакция не удалась.');
+        };   
     };
 
     BankCardCancel() {
-        this.cardTransactionActive = false;
-        console.log('Оплата картой остановлена');
+        this.cancelCardPurchase = true;
     };
-}
+
+    Vend(product_idx, cb) {
+        const res = cb();
+        return res ? `Продукт ${product_idx} выдан`: 'Ошибка!';
+    }
+};
 
 export default Emulator;

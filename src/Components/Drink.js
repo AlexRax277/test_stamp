@@ -1,6 +1,8 @@
-import { useParams } from "react-router-dom";
+import { useParams, Routes, Route, useNavigate} from "react-router-dom";
 import Emulator from "./Emulator.js";
-import { useState } from "react";
+import CashPay from "./CashPay.js";
+import CardPay from "./CardPay.js";
+import Issuance from "./Issuance.js";
 
 
 const emulator = new Emulator();
@@ -8,58 +10,27 @@ const emulator = new Emulator();
 
 const Drink = () => {
     const drink = useParams().drink;
-    const [cash_pay, setCash_pay] = useState('Оплата наличными');
-    const [card_pay, setCard_pay] = useState('Оплата банковской картой');
-    const [cashinInProgress, setCashinInProgress] = useState(false);
-    const [cardTransactionInProgress, setCardTransactionInProgress] = useState(false);
+    const navigate = useNavigate();
 
-    const handleCashPayment = () => {
-        const bills = [10, 20, 50, 100];
-        const price = 150;
-        if (!cashinInProgress) {
-                emulator.startCashin(price, bills, (bill) => {
-                setCash_pay('Остановить оплату');
-                console.log(`Принята купюра: ${bill} у.е.`);
-            });
-        } else {
-            setCash_pay('Оплата наличными');
-            emulator.stopCashin();
-        }
-        setCashinInProgress(!cashinInProgress)
+    const handlePayment = (e) => {
+        navigate(e.target.className);
     };
-
-    const handleCardPayment = () => {
-        const amount = 150;
-        if (!cardTransactionInProgress) {
-            emulator.BankCardPurchase(
-                amount,
-                (result) => {
-                    if (result) {
-                        console.log('Банковская транзакция успешно завершена.');
-                    } else {
-                        console.log('Банковская транзакция не удалась.');
-                    }
-                },
-                (status) => {
-                    console.log(`Статус платежа: ${status}`);
-                }
-            );
-            setCard_pay('Отменить оплату картой');
-        } else {
-            emulator.BankCardCancel();
-            setCard_pay('Оплата банковской картой');
-        }
-        setCardTransactionInProgress(!cardTransactionInProgress);
-    };
-
 
     return <div className="drink">
         <h2>Напиток: {drink}</h2>
-        <div className="payment-options">
-            <button className="cash-payment" onClick={handleCashPayment}>{cash_pay}</button>
-            <button className="card-payment" onClick={handleCardPayment}>{card_pay}</button>
-        </div>
+        <Routes>
+            <Route path="/" element={
+                    <div className="payment-options">
+                       <button className="cashpay" onClick={handlePayment}>Оплата наличными</button>
+                       <button className="cardpay" onClick={handlePayment}>Оплата банковской картой</button>
+                   </div>
+            }/>
+            <Route path="/cashpay" element={<CashPay startCashin={emulator.startCashin.bind(emulator)} stopCashin={emulator.stopCashin.bind(emulator)}/>}/>
+            <Route path="/cardpay/*" element={<CardPay BankCardPurchase={emulator.BankCardPurchase.bind(emulator)} 
+            BankCardCancel={emulator.BankCardCancel.bind(emulator)} Vend={emulator.Vend.bind(emulator)}/>}/>
+        </Routes>
     </div>
+
 }
 
 export default Drink;
