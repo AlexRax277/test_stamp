@@ -2,7 +2,6 @@ import { useParams, Routes, Route, useNavigate} from "react-router-dom";
 import Emulator from "./Emulator.js";
 import CashPay from "./CashPay.js";
 import CardPay from "./CardPay.js";
-import Issuance from "./Issuance.js";
 
 
 const emulator = new Emulator();
@@ -26,7 +25,7 @@ const Drink = () => {
                    </div>
             }/>
             <Route path="/cashpay" element={<CashPay startCashin={emulator.startCashin.bind(emulator)} stopCashin={emulator.stopCashin.bind(emulator)}/>}/>
-            <Route path="/cardpay/*" element={<CardPay BankCardPurchase={emulator.BankCardPurchase.bind(emulator)} 
+            <Route path="/cardpay" element={<CardPay BankCardPurchase={emulator.BankCardPurchase.bind(emulator)} 
             BankCardCancel={emulator.BankCardCancel.bind(emulator)} Vend={emulator.Vend.bind(emulator)}/>}/>
         </Routes>
     </div>

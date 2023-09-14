@@ -35,6 +35,7 @@ const CardPay = ({ BankCardPurchase, BankCardCancel, Vend }) => {
           document.removeEventListener('keypress', onKeypress);
           setLoading(false);
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     
     return (
