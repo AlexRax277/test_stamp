@@ -40,7 +40,7 @@ class Emulator {
 
     Vend(product_idx, cb) {
         const res = cb();
-        return res ? `Продукт ${product_idx} выдан`: 'Ошибка!';
+        return res ? `Напиток ${product_idx} выдан`: 'Ошибка!';
     }
 };
 

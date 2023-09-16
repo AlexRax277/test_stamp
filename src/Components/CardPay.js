@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Control from "./Control";
-import Issuance from "./Issuance";
 
-const CardPay = ({ BankCardPurchase, BankCardCancel, Vend }) => {
+
+const CardPay = ({ BankCardPurchase, BankCardCancel, keep }) => {
     const [msg, setMsg] = useState('Для оплаты картой нажмите пробел.');
     const [loading, setLoading] = useState(false);
     const [showIssuance, setShowIssuance] = useState(false);
@@ -11,6 +11,7 @@ const CardPay = ({ BankCardPurchase, BankCardCancel, Vend }) => {
     const amount = 150;
 
     const stop = () => loading ? BankCardCancel(): navigate('/test_stamp');
+    
 
     useEffect(() => {
         const onKeypress = async (e) => {
@@ -40,10 +41,9 @@ const CardPay = ({ BankCardPurchase, BankCardCancel, Vend }) => {
     
     return (
         <div>
-            <Routes>
-                <Route path="/" element={<Control msg={msg} stop={stop}/>}/>
-                <Route path="/issuance" element={showIssuance && <Issuance vend={Vend}/>}/>
-            </Routes>
+            <Control msg={msg} stop={stop}/>
+
+            {showIssuance && <button className="keep-prod" onClick={keep}>Получить продукт</button>}
         </div>
     )
 };

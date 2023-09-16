@@ -1,52 +1,30 @@
 import React, { useEffect, useState } from "react";
 
-const Issuance = ({ product_idx, cb }) => {
-    const [ctrlPressed, setCtrlPressed] = useState(false);
-    const [altPressed, setAltPressed] = useState(false);
+const Issuance = ({ drink, vend }) => {
+    const [msg, setMsg] = useState('Нажмите space для выдачи или любую другую для выброса ошибки');
 
     useEffect(() => {
-        const handleKeyDown = (e) => {
-            if (e.key === "Control") {
-                setCtrlPressed(true);
-            }
-            if (e.key === "Alt") {
-                setAltPressed(true);
-            }
+        const onKeypress = async (e) => {
+            setMsg('Обработка...');
+            const res = vend(
+                drink,
+                () => e.code === 'Space'
+            );
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            setMsg(res);
         };
 
-        const handleKeyUp = (e) => {
-            if (e.key === "Control") {
-                setCtrlPressed(false);
-            }
-            if (e.key === "Alt") {
-                setAltPressed(false);
-            }
-        };
-
-        document.addEventListener("keydown", handleKeyDown);
-        document.addEventListener("keyup", handleKeyUp);
+        document.addEventListener('keypress', onKeypress);
 
         return () => {
-            document.removeEventListener("keydown", handleKeyDown);
-            document.removeEventListener("keyup", handleKeyUp);
+            document.removeEventListener('keypress', onKeypress);
         };
-    }, []);
-
-    useEffect(() => {
-        if (ctrlPressed || altPressed) {
-            cb(true);
-        } else {
-            cb(false);
-        }
-    }, [ctrlPressed, altPressed, cb]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
-        <div>
-            {ctrlPressed || altPressed ? (
-                <p>Продукт {product_idx} выдан</p>
-            ) : (
-                <p>Ошибка! Продукт недоступен</p>
-            )}
+        <div className="msg">
+            {msg}
         </div>
     );
 };
